@@ -7,4 +7,4 @@ const request = new Request("http://localhost:4200/test");
 request.setBody({});
 const adapter = new Adapter(request);
 
-adapter.doPut(1);
+adapter.doPut(100);

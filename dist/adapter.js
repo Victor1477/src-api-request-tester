@@ -10,6 +10,7 @@ class Adapter {
     request;
     delay;
     isCurrentProcessing;
+    finalResult;
     constructor(request, delay) {
         this.request = request;
         this.delay = delay;
@@ -30,6 +31,7 @@ class Adapter {
         this.handleRequest(requestNumber, axios_1.default.put, this.request.url, this.request.body, this.getOptions());
     }
     handleRequest(requestNumber, fn, ...params) {
+        this.finalResult = { sucesses: 0, fails: 0 };
         if (this.isCurrentProcessing) {
             throw new Error("Application is current processing request");
         }
@@ -45,17 +47,20 @@ class Adapter {
             }
             else {
                 this.isCurrentProcessing = false;
+                console.log("\nFinal Result is: ", this.finalResult);
             }
         };
         fn(...params)
             .then((response) => {
             console.log("Sucess");
+            this.finalResult.sucesses++;
             setTimeout(() => {
                 handleAxiosReturn();
             }, this.delay);
         })
             .catch((err) => {
             console.log("Fail");
+            this.finalResult.fails++;
             setTimeout(() => {
                 handleAxiosReturn();
             }, this.delay);

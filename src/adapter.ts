@@ -4,6 +4,7 @@ import { addPropertyToObject } from "./utils.js";
 
 export class Adapter {
   private isCurrentProcessing: boolean;
+  private finalResult: { sucesses: number; fails: number };
   constructor(private request: Request, private delay?: number) {}
 
   doGet(requestNumber: number) {
@@ -25,6 +26,7 @@ export class Adapter {
   }
 
   private handleRequest(requestNumber: number, fn: (...params: any[]) => Axios.IPromise<Axios.AxiosXHR<unknown>>, ...params: any[]) {
+    this.finalResult = { sucesses: 0, fails: 0 };
     if (this.isCurrentProcessing) {
       throw new Error("Application is current processing request");
     }
@@ -40,18 +42,21 @@ export class Adapter {
         this.doRequest(requestNumber, fn, params);
       } else {
         this.isCurrentProcessing = false;
+        console.log("\nFinal Result is: ", this.finalResult);
       }
     };
 
     fn(...params)
       .then((response) => {
         console.log("Sucess");
+        this.finalResult.sucesses++;
         setTimeout(() => {
           handleAxiosReturn();
         }, this.delay);
       })
       .catch((err) => {
         console.log("Fail");
+        this.finalResult.fails++;
         setTimeout(() => {
           handleAxiosReturn();
         }, this.delay);
