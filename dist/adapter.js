@@ -8,18 +8,26 @@ const axios_1 = __importDefault(require("axios"));
 const utils_js_1 = require("./utils.js");
 class Adapter {
     request;
+    delay;
     isCurrentProcessing;
-    constructor(request) {
+    constructor(request, delay) {
         this.request = request;
+        this.delay = delay;
     }
     doGet(requestNumber) {
         this.handleRequest(requestNumber, axios_1.default.get, this.request.url, this.getOptions());
     }
     doPost(requestNumber) {
         if (!this.request.body) {
-            throw new Error("The request has no body");
+            throw new Error("The post request has no body");
         }
         this.handleRequest(requestNumber, axios_1.default.post, this.request.url, this.request.body, this.getOptions());
+    }
+    doPut(requestNumber) {
+        if (!this.request.body) {
+            throw new Error("The put request has no body");
+        }
+        this.handleRequest(requestNumber, axios_1.default.put, this.request.url, this.request.body, this.getOptions());
     }
     handleRequest(requestNumber, fn, ...params) {
         if (this.isCurrentProcessing) {
@@ -32,6 +40,7 @@ class Adapter {
         const handleAxiosReturn = () => {
             requestNumber--;
             if (requestNumber > 0) {
+                console.log("Remaining requests: " + requestNumber);
                 this.doRequest(requestNumber, fn, params);
             }
             else {
@@ -41,11 +50,15 @@ class Adapter {
         fn(...params)
             .then((response) => {
             console.log("Sucess");
-            handleAxiosReturn();
+            setTimeout(() => {
+                handleAxiosReturn();
+            }, this.delay);
         })
             .catch((err) => {
             console.log("Fail");
-            handleAxiosReturn();
+            setTimeout(() => {
+                handleAxiosReturn();
+            }, this.delay);
         });
     }
     getOptions() {
