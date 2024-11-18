@@ -1,0 +1,23 @@
+{
+  "name": "src-api-request-tester",
+  "version": "1.0.0",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "tsc --watch",
+    "start": "tsc && nodemon dist/app.js",
+    "test": "vitest"
+  },
+  "author": "Joao Oliveira",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "nodemon": "^3.1.7",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.9.36",
+    "@types/node": "^22.9.0"
+  }
+}
