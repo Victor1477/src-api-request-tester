@@ -1,0 +1,1 @@
+{ "url": "", "method": "GET", "headers": {}, "params": {}, "body": null, "appConfig": { "workers": 1, "requestsPerWorker": 1 } }

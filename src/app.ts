@@ -1,7 +1,7 @@
 import fs from "fs";
-import { Adapter } from "./adapter";
-import { Request } from "./request";
 import { join } from "path";
+import config from "../request.config.json";
+import { Worker } from "worker_threads";
 
 console.clear();
 
@@ -9,9 +9,7 @@ console.clear();
 fs.rm(join(process.cwd(), "logs"), { recursive: true, force: true }, (err) => {
   fs.mkdir(join(process.cwd(), "logs"), (err) => {});
 
-  const request = new Request("http://www.google.com");
-
-  const adapter = new Adapter(request);
-
-  adapter.doGet(10);
+  for (let i = 0; i < config.appConfig.workers; i++) {
+    const worker = new Worker(join(__dirname, "request.worker.js"));
+  }
 });
