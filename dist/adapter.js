@@ -65,7 +65,7 @@ class Adapter {
         })
             .catch((err) => {
             console.log("Fail");
-            logger_js_1.Logger.error(`--------------- Request ${this.requestsCounter} ----------------- \n\n ${JSON.stringify(err)}\n\n\n`);
+            logger_js_1.Logger.error(`--------------- Request ${this.requestsCounter} ----------------- \n\n ${JSON.stringify(err)}\nResponseData: ${JSON.stringify(err.response.data)}\n\n`);
             this.finalResult.fails++;
             setTimeout(() => {
                 handleAxiosReturn();
