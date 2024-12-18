@@ -1,7 +1,7 @@
 import fs from "fs";
 import { join } from "path";
 import config from "../request.config.json";
-import { Worker } from "worker_threads";
+import child_process from "node:child_process";
 
 console.clear();
 
@@ -10,6 +10,6 @@ fs.rm(join(process.cwd(), "logs"), { recursive: true, force: true }, (err) => {
   fs.mkdir(join(process.cwd(), "logs"), (err) => {});
 
   for (let i = 0; i < config.appConfig.workers; i++) {
-    const worker = new Worker(join(__dirname, "request.worker.js"));
+    child_process.fork(join(__dirname, "request.worker.js"));
   }
 });
